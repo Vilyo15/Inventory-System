@@ -5,7 +5,12 @@ using UnityEngine;
 public enum ItemType
 {
     Consumable,
-    Equipment,
+    Helmet,
+    Chest,
+    Shield,
+    Pants,
+    Shoes,
+    Weapon,
     Material
 }
 
@@ -20,12 +25,11 @@ public enum Attributes
 
 public class BaseItemScriptableObject : ScriptableObject
 {
-    public int Id;
     public Sprite Sprite;
     public ItemType Type;
     [TextArea(15, 20)]
     public string Description;
-    public ItemBuff[] Buffs;
+    public Item ItemReference = new Item();
 
     public Item CreateItem()
     {
@@ -42,18 +46,23 @@ public class Item
     public int Id;
     public ItemBuff[] Buffs;
     public BaseItemScriptableObject Reference;
- 
+
+    public Item()
+    {
+        Name = "";
+        Id = -1;
+    }
     public Item(BaseItemScriptableObject item)
     {
         Name = item.name;
-        Id = item.Id;
-        Buffs = new ItemBuff[item.Buffs.Length];
+        Id = item.ItemReference.Id;
+        Buffs = new ItemBuff[item.ItemReference.Buffs.Length];
         Reference = item;
         for (int i = 0; i < Buffs.Length; i++)
         {
-            Buffs[i] = new ItemBuff(item.Buffs[i].Min, item.Buffs[i].Max)
+            Buffs[i] = new ItemBuff(item.ItemReference.Buffs[i].Value)
             {
-                Attribute = item.Buffs[i].Attribute
+                Attribute = item.ItemReference.Buffs[i].Attribute
             };
         }
     }
@@ -64,18 +73,13 @@ public class ItemBuff
 {
     public Attributes Attribute;
     public int Value;
-    public int Min;
-    public int Max;
+    
 
    
-    public ItemBuff(int min, int max)
+    public ItemBuff(int value)
     {
-        Min = min;
-        Max = max;
-        GenerateValue();
+        Attribute = Attributes.Attack;
+        Value = value;
     }
-    private void GenerateValue()
-    {
-        Value = UnityEngine.Random.Range(Min, Max);
-    }
+  
 }

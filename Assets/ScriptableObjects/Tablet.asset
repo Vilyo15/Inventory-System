@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5f1f613a6365a14b803c192029ccc3c, type: 3}
-  m_Name: Apple
+  m_Name: Tablet
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 21300000, guid: 6b28bc7de8cab554cb2f776a47ac7860, type: 3}
+  Sprite: {fileID: 21300000, guid: 10286a21e35d6c546a793dea2c86ad34, type: 3}
   Type: 0
   Description: 
   ItemReference:

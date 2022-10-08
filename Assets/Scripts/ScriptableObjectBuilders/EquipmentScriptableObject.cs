@@ -7,6 +7,6 @@ public class EquipmentScriptableObject : BaseItemScriptableObject
 {
     public void Awake()
     {
-        Type = ItemType.Equipment;
+        Type = ItemType.Weapon;
     }
 }

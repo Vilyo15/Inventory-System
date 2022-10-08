@@ -12,7 +12,7 @@ public class ExistingItemsScriptableObject : ScriptableObject
     {
         for (int i = 0; i < Items.Length; i++)
         {
-            Items[i].Id = i;
+            Items[i].ItemReference.Id = i;
             GetItem.Add(i, Items[i]);
         }
     }

@@ -16,7 +16,7 @@ public class InventoryScriptableObject : ScriptableObject
 
         for (int i = 0; i < Inventory.InventoryObject.Length; i++)
         {
-            if (Inventory.InventoryObject[i].ID == _item.Id)
+            if (Inventory.InventoryObject[i].Item.Id == _item.Id)
             {
                 Inventory.InventoryObject[i].AddAmount(_amount);
                 return;
@@ -29,9 +29,9 @@ public class InventoryScriptableObject : ScriptableObject
     {
         for (int i = 0; i < Inventory.InventoryObject.Length; i++)
         {
-            if (Inventory.InventoryObject[i].ID <= -1)
+            if (Inventory.InventoryObject[i].Item.Id <= -1)
             {
-                Inventory.InventoryObject[i].UpdateSlot(_item.Id, _item, _amount);
+                Inventory.InventoryObject[i].UpdateSlot(_item, _amount);
                 return Inventory.InventoryObject[i];
             }
         }
@@ -41,9 +41,12 @@ public class InventoryScriptableObject : ScriptableObject
 
     public void MoveItem(InventorySlot item1, InventorySlot item2)
     {
-        InventorySlot temp = new InventorySlot(item2.ID, item2.Item, item2.Amount);
-        item2.UpdateSlot(item1.ID, item1.Item, item1.Amount);
-        item1.UpdateSlot(temp.ID, temp.Item, temp.Amount);
+        if (item2.CanPlaceInSlot(item1.ItemObject) && item1.CanPlaceInSlot(item2.ItemObject))
+        {
+            InventorySlot temp = new InventorySlot(item2.Item, item2.Amount);
+            item2.UpdateSlot(item1.Item, item1.Amount);
+            item1.UpdateSlot(temp.Item, temp.Amount);
+        }
     }
 
 
@@ -53,7 +56,7 @@ public class InventoryScriptableObject : ScriptableObject
         {
             if (Inventory.InventoryObject[i].Item == _item)
             {
-                Inventory.InventoryObject[i].UpdateSlot(-1, null, 0);
+                Inventory.InventoryObject[i].UpdateSlot(null, 0);
             }
         }
     }
