@@ -16,7 +16,7 @@ MonoBehaviour:
   Type: 1
   Description: 
   ItemReference:
-    Name: Sword
+    Name: Helmet
     Id: 4
     Buffs:
     - Attribute: 3

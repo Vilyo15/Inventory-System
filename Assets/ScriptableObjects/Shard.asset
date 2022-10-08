@@ -16,7 +16,7 @@ MonoBehaviour:
   Type: 7
   Description: 
   ItemReference:
-    Name: Stick
-    Id: 0
+    Name: Shard
+    Id: 6
     Buffs: []
     Reference: {fileID: 11400000}
