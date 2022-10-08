@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    //serialized fields
+    [SerializeField] private InventoryScriptableObject _inventory;
     //state machine references
     private BaseState _currentState;
     private StateFactory _factory;
@@ -13,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _character;
     private PlayerControls _playerInput;
     private Animator _animator;
+    
 
     //variables to store animator bool hashes
     private int _isWalkingHash;
@@ -140,6 +143,17 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("trigger");
+        var itemObject = collision.GetComponent<ItemObject>();
+        if (itemObject != null)
+        {
+            Item item = new Item(itemObject.Item);
+            _inventory.AddItem(item, 1);
+            itemObject.DestroySelf();
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        _inventory.Clear();
     }
 }
