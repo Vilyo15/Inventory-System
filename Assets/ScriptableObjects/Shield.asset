@@ -16,7 +16,7 @@ MonoBehaviour:
   Type: 3
   Description: 
   ItemReference:
-    Name: Sword
+    Name: Shield
     Id: 7
     Buffs:
     - Attribute: 1

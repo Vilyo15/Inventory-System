@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class EquipScreenUI : UserInterfaceBase
 {
     [SerializeField] private GameObject[] _equipSlots;
-    
+    [SerializeField] private PlayerBaseScriptableObject _player;
     protected override void PopulateInventory()
     {
         Inventory = Instantiate(Inventory);
@@ -31,8 +31,57 @@ public class EquipScreenUI : UserInterfaceBase
 
     }
 
-    
+    private void Awake()
+    {
+        onUpdate += UpdatePlayerAttributes;
+        beforeUpdate += RemovePlayerAttributes;
+    }
 
+    private void RemovePlayerAttributes()
+    {
+        for (int i = 0; i < Inventory.Inventory.InventoryObject.Length; i++)
+        {
+
+            var obj = _equipSlots[i];
+            for (int j = 0; j < InventoryUI[obj].Item.Buffs.Length; j++)
+            {
+                if (InventoryUI[obj].Item.Buffs[j] != null)
+                {
+                    _player.DecreaseAttribute(InventoryUI[obj].Item.Buffs[j].Attribute, InventoryUI[obj].Item.Buffs[j].Value);
+                    Debug.Log(InventoryUI[obj].Item.Buffs[j].Attribute);
+                    Debug.Log(InventoryUI[obj].Item.Buffs[j].Value);
+                }
+                else
+                {
+
+                }
+
+            }
+        }
+    }
+
+    private void UpdatePlayerAttributes()
+    {
+        for (int i = 0; i < Inventory.Inventory.InventoryObject.Length; i++)
+        {
+
+            var obj = _equipSlots[i];
+            for (int j = 0; j < InventoryUI[obj].Item.Buffs.Length; j++)
+            {
+                if (InventoryUI[obj].Item.Buffs[j] != null)
+                {
+                    _player.IncreaseAttribute(InventoryUI[obj].Item.Buffs[j].Attribute, InventoryUI[obj].Item.Buffs[j].Value);
+                    Debug.Log(InventoryUI[obj].Item.Buffs[j].Attribute);
+                    Debug.Log(InventoryUI[obj].Item.Buffs[j].Value);
+                }
+                else
+                {
+
+                }
+                
+            }
+        }
+    }
 
 }
     

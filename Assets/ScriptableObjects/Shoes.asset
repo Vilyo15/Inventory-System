@@ -16,7 +16,7 @@ MonoBehaviour:
   Type: 5
   Description: 
   ItemReference:
-    Name: Sword
+    Name: Shoes
     Id: 8
     Buffs:
     - Attribute: 2

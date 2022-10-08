@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System;
 [System.Serializable]
 
 public class Inventory 
@@ -16,7 +16,7 @@ public class InventorySlot
     public int Amount;
     public UserInterfaceBase Parent;
     public SlotUpdated OnAfterUpdate;
-    public SlotUpdated OnBeforeUpdate;
+    public event Action OnBeforeUpdate;
     public GameObject gameObjectParent;
 
     public InventorySlot()
@@ -42,15 +42,14 @@ public class InventorySlot
     }
     public void UpdateSlot(Item item, int amount)
     {
-        if (OnBeforeUpdate != null)
-            OnBeforeUpdate.Invoke(this);
+        OnBeforeUpdate?.Invoke();
         Item = item;
         Amount = amount;
-        if (OnAfterUpdate != null)
-            OnAfterUpdate.Invoke(this);
+        OnAfterUpdate?.Invoke(this);
     }
     public void RemoveItem()
     {
+        
         UpdateSlot(new Item(), 0);
     }
     public void AddAmount(int value)

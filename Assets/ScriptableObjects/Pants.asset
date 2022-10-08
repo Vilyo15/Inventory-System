@@ -16,7 +16,7 @@ MonoBehaviour:
   Type: 4
   Description: 
   ItemReference:
-    Name: Sword
+    Name: Pants
     Id: 5
     Buffs:
     - Attribute: 1

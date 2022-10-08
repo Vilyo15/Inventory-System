@@ -16,7 +16,7 @@ MonoBehaviour:
   Type: 2
   Description: 
   ItemReference:
-    Name: Sword
+    Name: Chest
     Id: 3
     Buffs:
     - Attribute: 1

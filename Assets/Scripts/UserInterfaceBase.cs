@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -25,6 +26,8 @@ public abstract class UserInterfaceBase : MonoBehaviour
     public GameObject InterfaceSlotPrefab { get { return _interfaceSlotPrefab; } }
     public Dictionary<GameObject, InventorySlot> InventoryUI { get { return _inventoryUI; } }
 
+    public event Action onUpdate,beforeUpdate;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -35,15 +38,20 @@ public abstract class UserInterfaceBase : MonoBehaviour
         {
             //_inventory.Inventory.InventoryObject[i].Parent = this;
             _inventory.Inventory.InventoryObject[i].OnAfterUpdate += OnSlotUpdate;
+            _inventory.Inventory.InventoryObject[i].OnBeforeUpdate += OnBeforeUpdate;
 
         }
-
+        
         AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnEnterInterface(gameObject); });
         AddEvent(gameObject, EventTriggerType.PointerExit, delegate { OnExitInterface(gameObject); });
     }
 
     protected abstract void PopulateInventory();
 
+    protected  void OnBeforeUpdate()
+    {
+        beforeUpdate?.Invoke();
+    }
 
     protected void OnSlotUpdate(InventorySlot _slot)
     {
@@ -59,6 +67,7 @@ public abstract class UserInterfaceBase : MonoBehaviour
             _slot.gameObjectParent.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0);
             _slot.gameObjectParent.GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
+        onUpdate?.Invoke();
     }
 
     protected void AddEvent(GameObject obj, EventTriggerType type, UnityAction<BaseEventData> action)
