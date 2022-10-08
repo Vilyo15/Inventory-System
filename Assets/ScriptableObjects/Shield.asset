@@ -9,14 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5f1f613a6365a14b803c192029ccc3c, type: 3}
-  m_Name: Apple
+  m_Script: {fileID: 11500000, guid: 47d564c6ed22a2043b5f06953655c8fe, type: 3}
+  m_Name: Shield
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 21300000, guid: 6b28bc7de8cab554cb2f776a47ac7860, type: 3}
-  Type: 0
+  Sprite: {fileID: 21300000, guid: 5b3a0da84bb04314e85c48e382ff2e62, type: 3}
+  Type: 3
   Description: 
   ItemReference:
-    Name: Apple
-    Id: 2
-    Buffs: []
+    Name: Sword
+    Id: 7
+    Buffs:
+    - Attribute: 1
+      Value: 5
     Reference: {fileID: 11400000}

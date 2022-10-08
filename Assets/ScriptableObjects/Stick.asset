@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9604cf1826439c746a9195ffb080d46b, type: 3}
   m_Name: Stick
   m_EditorClassIdentifier: 
-  Id: 0
   Sprite: {fileID: 21300000, guid: b664865dfa6eaf34db58937f897a4d45, type: 3}
   Type: 2
   Description: 
-  Buffs: []
+  ItemReference:
+    Name: Stick
+    Id: 0
+    Buffs: []
+    Reference: {fileID: 11400000}
