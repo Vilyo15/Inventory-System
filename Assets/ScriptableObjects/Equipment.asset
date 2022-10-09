@@ -32,7 +32,7 @@ MonoBehaviour:
       Amount: 0
       Parent: {fileID: 0}
       gameObjectParent: {fileID: 0}
-    - AllowedItems: 0300000006000000
+    - AllowedItems: 03000000
       Item:
         Name: 
         Id: -1

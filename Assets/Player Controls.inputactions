@@ -92,6 +92,74 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "UserInterface",
+            "id": "a64d53d7-d2cd-4011-810f-32bf9ada8cbd",
+            "actions": [
+                {
+                    "name": "InventoryScreen",
+                    "type": "Button",
+                    "id": "2742f7c7-ce80-45ce-b1ae-1c86d1708c71",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "EquipmentScreen",
+                    "type": "Button",
+                    "id": "10b93436-f316-4235-82ca-d021d4b3ea5f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AttributeScreen",
+                    "type": "Button",
+                    "id": "62fdb4ca-8227-4828-9b53-674170dcd22b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f3487af5-0b22-4718-a756-a89d2deb7407",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InventoryScreen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "46494775-e014-4914-8e11-eeb14b8a332f",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EquipmentScreen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5f4dbb27-f217-41d1-acd9-56a4cc951b23",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AttributeScreen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

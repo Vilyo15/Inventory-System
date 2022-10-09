@@ -114,6 +114,74 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UserInterface"",
+            ""id"": ""a64d53d7-d2cd-4011-810f-32bf9ada8cbd"",
+            ""actions"": [
+                {
+                    ""name"": ""InventoryScreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""2742f7c7-ce80-45ce-b1ae-1c86d1708c71"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EquipmentScreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""10b93436-f316-4235-82ca-d021d4b3ea5f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AttributeScreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""62fdb4ca-8227-4828-9b53-674170dcd22b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f3487af5-0b22-4718-a756-a89d2deb7407"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46494775-e014-4914-8e11-eeb14b8a332f"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EquipmentScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5f4dbb27-f217-41d1-acd9-56a4cc951b23"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AttributeScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -122,6 +190,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_CharacterControls = asset.FindActionMap("CharacterControls", throwIfNotFound: true);
         m_CharacterControls_Move = m_CharacterControls.FindAction("Move", throwIfNotFound: true);
         m_CharacterControls_Run = m_CharacterControls.FindAction("Run", throwIfNotFound: true);
+        // UserInterface
+        m_UserInterface = asset.FindActionMap("UserInterface", throwIfNotFound: true);
+        m_UserInterface_InventoryScreen = m_UserInterface.FindAction("InventoryScreen", throwIfNotFound: true);
+        m_UserInterface_EquipmentScreen = m_UserInterface.FindAction("EquipmentScreen", throwIfNotFound: true);
+        m_UserInterface_AttributeScreen = m_UserInterface.FindAction("AttributeScreen", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -218,9 +291,64 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public CharacterControlsActions @CharacterControls => new CharacterControlsActions(this);
+
+    // UserInterface
+    private readonly InputActionMap m_UserInterface;
+    private IUserInterfaceActions m_UserInterfaceActionsCallbackInterface;
+    private readonly InputAction m_UserInterface_InventoryScreen;
+    private readonly InputAction m_UserInterface_EquipmentScreen;
+    private readonly InputAction m_UserInterface_AttributeScreen;
+    public struct UserInterfaceActions
+    {
+        private @PlayerControls m_Wrapper;
+        public UserInterfaceActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @InventoryScreen => m_Wrapper.m_UserInterface_InventoryScreen;
+        public InputAction @EquipmentScreen => m_Wrapper.m_UserInterface_EquipmentScreen;
+        public InputAction @AttributeScreen => m_Wrapper.m_UserInterface_AttributeScreen;
+        public InputActionMap Get() { return m_Wrapper.m_UserInterface; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UserInterfaceActions set) { return set.Get(); }
+        public void SetCallbacks(IUserInterfaceActions instance)
+        {
+            if (m_Wrapper.m_UserInterfaceActionsCallbackInterface != null)
+            {
+                @InventoryScreen.started -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnInventoryScreen;
+                @InventoryScreen.performed -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnInventoryScreen;
+                @InventoryScreen.canceled -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnInventoryScreen;
+                @EquipmentScreen.started -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnEquipmentScreen;
+                @EquipmentScreen.performed -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnEquipmentScreen;
+                @EquipmentScreen.canceled -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnEquipmentScreen;
+                @AttributeScreen.started -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnAttributeScreen;
+                @AttributeScreen.performed -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnAttributeScreen;
+                @AttributeScreen.canceled -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnAttributeScreen;
+            }
+            m_Wrapper.m_UserInterfaceActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @InventoryScreen.started += instance.OnInventoryScreen;
+                @InventoryScreen.performed += instance.OnInventoryScreen;
+                @InventoryScreen.canceled += instance.OnInventoryScreen;
+                @EquipmentScreen.started += instance.OnEquipmentScreen;
+                @EquipmentScreen.performed += instance.OnEquipmentScreen;
+                @EquipmentScreen.canceled += instance.OnEquipmentScreen;
+                @AttributeScreen.started += instance.OnAttributeScreen;
+                @AttributeScreen.performed += instance.OnAttributeScreen;
+                @AttributeScreen.canceled += instance.OnAttributeScreen;
+            }
+        }
+    }
+    public UserInterfaceActions @UserInterface => new UserInterfaceActions(this);
     public interface ICharacterControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
+    }
+    public interface IUserInterfaceActions
+    {
+        void OnInventoryScreen(InputAction.CallbackContext context);
+        void OnEquipmentScreen(InputAction.CallbackContext context);
+        void OnAttributeScreen(InputAction.CallbackContext context);
     }
 }

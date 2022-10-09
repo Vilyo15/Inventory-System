@@ -8,6 +8,8 @@ public class EquipScreenUI : UserInterfaceBase
 {
     [SerializeField] private GameObject[] _equipSlots;
     [SerializeField] private PlayerBaseScriptableObject _player;
+
+    public GameObject[] EquipSlots { get { return _equipSlots; } }
     protected override void PopulateInventory()
     {
         Inventory = Instantiate(Inventory);
@@ -21,6 +23,7 @@ public class EquipScreenUI : UserInterfaceBase
             AddEvent(obj, EventTriggerType.BeginDrag, delegate { OnDragStart(obj); });
             AddEvent(obj, EventTriggerType.EndDrag, delegate { OnDragEnd(obj); });
             AddEvent(obj, EventTriggerType.Drag, delegate { OnDrag(obj); });
+            obj.AddComponent<MyRightClickClass>();
 
             Inventory.Inventory.InventoryObject[i].gameObjectParent = obj;
             InventoryUI.Add(obj, Inventory.Inventory.InventoryObject[i]);
@@ -82,6 +85,7 @@ public class EquipScreenUI : UserInterfaceBase
             }
         }
     }
+   
 
 }
     

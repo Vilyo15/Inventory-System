@@ -11,7 +11,7 @@ using TMPro;
 public abstract class UserInterfaceBase : MonoBehaviour
 {
     [SerializeField] private InventoryScriptableObject _inventory;
-    
+
     [SerializeField] private RectTransform _mouseObject;
     [SerializeField] private ExistingItemsScriptableObject list;
     [SerializeField] private GameObject _interfaceSlotPrefab;
@@ -26,7 +26,7 @@ public abstract class UserInterfaceBase : MonoBehaviour
     public GameObject InterfaceSlotPrefab { get { return _interfaceSlotPrefab; } }
     public Dictionary<GameObject, InventorySlot> InventoryUI { get { return _inventoryUI; } }
 
-    public event Action onUpdate,beforeUpdate;
+    public event Action onUpdate, beforeUpdate;
 
     // Start is called before the first frame update
     private void Start()
@@ -41,14 +41,14 @@ public abstract class UserInterfaceBase : MonoBehaviour
             _inventory.Inventory.InventoryObject[i].OnBeforeUpdate += OnBeforeUpdate;
 
         }
-        
+
         AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnEnterInterface(gameObject); });
         AddEvent(gameObject, EventTriggerType.PointerExit, delegate { OnExitInterface(gameObject); });
     }
 
     protected abstract void PopulateInventory();
 
-    protected  void OnBeforeUpdate()
+    protected void OnBeforeUpdate()
     {
         beforeUpdate?.Invoke();
     }
@@ -106,6 +106,7 @@ public abstract class UserInterfaceBase : MonoBehaviour
     public void OnDragStart(GameObject obj)
     {
         MouseData.tempItemBeingDragged = CreateTempItem(obj);
+        obj.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
     }
     protected void OnDragEnd(GameObject obj)
     {
@@ -120,18 +121,18 @@ public abstract class UserInterfaceBase : MonoBehaviour
         {
             SpawnDroppedItem(obj);
             _inventoryUI[obj].RemoveItem();
-            
-            
-            
+
+
+
         }
         if (MouseData.slotHoveredOver && MouseData.interfaceMouseIsOver != null)
         {
             InventorySlot mouseHoverSlotData = MouseData.interfaceMouseIsOver._inventoryUI[MouseData.slotHoveredOver];
             _inventory.MoveItem(_inventoryUI[obj], mouseHoverSlotData);
         }
-
+        obj.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
         //_mouseItem.Obj.SetActive(false);
-        
+
         //_mouseItem.Item = null;
     }
     protected void OnDrag(GameObject obj)
@@ -148,6 +149,11 @@ public abstract class UserInterfaceBase : MonoBehaviour
     {
         MouseData.interfaceMouseIsOver = null;
     }
+    
+    public void Test()
+    {
+        Debug.Log("test worked");
+    }    
 
     protected void SpawnDroppedItem(GameObject obj)
     {
@@ -164,6 +170,7 @@ public abstract class UserInterfaceBase : MonoBehaviour
     private GameObject CreateTempItem(GameObject obj)
     {
         GameObject tempItem = null;
+        GameObject tempText = null;
         if (_inventoryUI[obj].Item.Id >= 0)
         {
             tempItem = new GameObject();
@@ -173,6 +180,18 @@ public abstract class UserInterfaceBase : MonoBehaviour
             var img = tempItem.AddComponent<Image>();
             img.sprite = _inventoryUI[obj].ItemObject.Sprite;
             img.raycastTarget = false;
+
+            tempText = new GameObject();
+            var tmpro = tempText.AddComponent<TextMeshProUGUI>();
+            var rt2 = tempText.GetComponent<RectTransform>();
+            rt2.sizeDelta = new Vector2(22f, 22f);
+            rt2.position = new Vector3(14.2f, -14.2f, 0f);
+            tmpro.text = _inventoryUI[obj].Amount.ToString();
+            tmpro.fontSize = 27.55f;
+            tmpro.color = new Color(225, 225, 0, 225);
+            //tmpro.enableAutoSizing = true;
+            tmpro.alignment = TextAlignmentOptions.BottomRight;
+            tempText.transform.SetParent(tempItem.transform);
         }
         return tempItem;
     }
