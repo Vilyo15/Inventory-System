@@ -12,3 +12,286 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3879cfdef1f5c8c4a9f0e76c52899f5e, type: 3}
   m_Name: Inventory
   m_EditorClassIdentifier: 
+  Inventory:
+    InventoryObject:
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+    - AllowedItems: 
+      Item:
+        Name: 
+        Id: -1
+        Buffs: []
+        Reference: {fileID: 0}
+        MaxStack: 0
+      Amount: 0
+      Parent: {fileID: 0}
+      gameObjectParent: {fileID: 0}
+  UpdateInventory: 0

@@ -12,10 +12,10 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject _equipmentButton;
     [SerializeField] private GameObject _attributeButton;
 
-
+    private PlayerControls _playerInput;
     public InventoryUI InventoryScreen { get { return _inventoryScreen.GetComponent<InventoryUI>(); } }
     public EquipScreenUI EquipmentScreen { get { return _equipmentScreen.GetComponent<EquipScreenUI>(); } }
-    private PlayerControls _playerInput;
+ 
 
     // Start is called before the first frame update
     void Awake()

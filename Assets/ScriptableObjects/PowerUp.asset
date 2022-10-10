@@ -9,16 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9604cf1826439c746a9195ffb080d46b, type: 3}
-  m_Name: Shard
+  m_Script: {fileID: 11500000, guid: b5f1f613a6365a14b803c192029ccc3c, type: 3}
+  m_Name: PowerUp
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 21300000, guid: 9da8b827754cd7d4dad1bb8c9712dd0a, type: 3}
-  Type: 7
-  Description: A piece of stone,
+  Sprite: {fileID: 21300000, guid: cb8e2bbcb17b50f4f89d7264d76b9c62, type: 3}
+  Type: 8
+  Description: 
   ItemReference:
-    Name: Shard
-    Id: 6
-    Buffs: []
+    Name: Power Up
+    Id: -1
+    Buffs:
+    - Attribute: 0
+      Value: 500
+    - Attribute: 1
+      Value: 500
     Reference: {fileID: 11400000}
     MaxStack: 0
   MaxStack: 0

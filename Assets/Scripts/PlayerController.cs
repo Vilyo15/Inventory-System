@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     //serialized fields
     [SerializeField] private InventoryScriptableObject _inventory;
+    [SerializeField] private PlayerBaseScriptableObject _player;
     //state machine references
     private BaseState _currentState;
     private StateFactory _factory;
@@ -144,7 +145,16 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         var itemObject = collision.GetComponent<ItemObject>();
-        if (itemObject != null)
+        if (itemObject != null && itemObject.Item.Type == ItemType.Upgrade)
+        {
+            for (int i = 0; i < itemObject.Item.ItemReference.Buffs.Length; i++)
+                if(itemObject.Item.ItemReference.Buffs[i] != null)
+                {
+                    _player.IncreaseAttribute(itemObject.Item.ItemReference.Buffs[i].Attribute, itemObject.Item.ItemReference.Buffs[i].Value);
+                }
+            itemObject.DestroySelf();
+        }
+        else if(itemObject != null)
         {
             Item item = new Item(itemObject.Item);
             _inventory.AddItem(item, 1);
@@ -152,5 +162,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+    private void OnApplicationQuit()
+    {
+        _inventory.Clear();
+        _player.Clear();
+
+    }
+
+
 }

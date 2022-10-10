@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sprite: {fileID: -4736321824554738019, guid: 12d15a77d2f62444f89d85f5358e1b9e, type: 3}
   Type: 5
-  Description: 
+  Description: Makes you go zoom zoom.
   ItemReference:
     Name: Shoes
     Id: 8
@@ -22,3 +22,5 @@ MonoBehaviour:
     - Attribute: 2
       Value: 10
     Reference: {fileID: 11400000}
+    MaxStack: 0
+  MaxStack: 0

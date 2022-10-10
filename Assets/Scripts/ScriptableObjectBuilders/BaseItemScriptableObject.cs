@@ -11,7 +11,8 @@ public enum ItemType
     Pants,
     Shoes,
     Weapon,
-    Material
+    Material,
+    Upgrade
 }
 
 public enum Attributes
@@ -30,7 +31,7 @@ public class BaseItemScriptableObject : ScriptableObject
     [TextArea(15, 20)]
     public string Description;
     public Item ItemReference = new Item();
-
+    public int MaxStack;
     public Item CreateItem()
     {
         Item newItem = new Item(this);
@@ -46,6 +47,7 @@ public class Item
     public int Id;
     public ItemBuff[] Buffs;
     public BaseItemScriptableObject Reference;
+    public int MaxStack;
 
     public Item()
     {
@@ -58,6 +60,7 @@ public class Item
         Id = item.ItemReference.Id;
         Buffs = new ItemBuff[item.ItemReference.Buffs.Length];
         Reference = item;
+        MaxStack = item.MaxStack;
         for (int i = 0; i < Buffs.Length; i++)
         {
             Buffs[i] = new ItemBuff(item.ItemReference.Buffs[i].Value)

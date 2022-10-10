@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sprite: {fileID: -6315837222103231590, guid: 12d15a77d2f62444f89d85f5358e1b9e, type: 3}
   Type: 1
-  Description: 
+  Description: Helmet
   ItemReference:
     Name: Helmet
     Id: 4
@@ -22,3 +22,5 @@ MonoBehaviour:
     - Attribute: 3
       Value: 3
     Reference: {fileID: 11400000}
+    MaxStack: 0
+  MaxStack: 0
