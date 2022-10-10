@@ -17,10 +17,11 @@ public abstract class UserInterfaceBase : MonoBehaviour
     [SerializeField] private GameObject _interfaceSlotPrefab;
     [SerializeField] private ItemObject itemPrefab;
     private Image _mouseImage;
-
     private Dictionary<GameObject, InventorySlot> _inventoryUI;
     private MouseItem _mouseItem = new MouseItem();
+    private InterfaceType _type;
 
+    public InterfaceType Type { get { return _type; } set { _type = value; } }
     public ExistingItemsScriptableObject List { get { return list; } }
     public InventoryScriptableObject Inventory { get { return _inventory; } set { _inventory = value; } }
     public GameObject InterfaceSlotPrefab { get { return _interfaceSlotPrefab; } }
@@ -216,4 +217,10 @@ public static class MouseData
     public static UserInterfaceBase interfaceMouseIsOver;
     public static GameObject tempItemBeingDragged;
     public static GameObject slotHoveredOver;
+}
+
+public enum InterfaceType
+{
+    Equipment,
+    Inventory
 }
