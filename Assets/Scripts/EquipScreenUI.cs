@@ -12,6 +12,7 @@ public class EquipScreenUI : UserInterfaceBase
     public GameObject[] EquipSlots { get { return _equipSlots; } }
     protected override void PopulateInventory()
     {
+        Type = InterfaceType.Equipment;
         Inventory = Instantiate(Inventory);
         for (int i = 0; i < Inventory.Inventory.InventoryObject.Length; i++)
         {
@@ -51,8 +52,7 @@ public class EquipScreenUI : UserInterfaceBase
                 if (InventoryUI[obj].Item.Buffs[j] != null)
                 {
                     _player.DecreaseAttribute(InventoryUI[obj].Item.Buffs[j].Attribute, InventoryUI[obj].Item.Buffs[j].Value);
-                    Debug.Log(InventoryUI[obj].Item.Buffs[j].Attribute);
-                    Debug.Log(InventoryUI[obj].Item.Buffs[j].Value);
+                  
                 }
                 else
                 {
@@ -74,8 +74,7 @@ public class EquipScreenUI : UserInterfaceBase
                 if (InventoryUI[obj].Item.Buffs[j] != null)
                 {
                     _player.IncreaseAttribute(InventoryUI[obj].Item.Buffs[j].Attribute, InventoryUI[obj].Item.Buffs[j].Value);
-                    Debug.Log(InventoryUI[obj].Item.Buffs[j].Attribute);
-                    Debug.Log(InventoryUI[obj].Item.Buffs[j].Value);
+                    
                 }
                 else
                 {
