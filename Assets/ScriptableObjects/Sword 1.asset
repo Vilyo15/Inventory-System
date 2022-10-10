@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sprite: {fileID: 21300000, guid: e9433e0c78082f44cb19983d5dfff311, type: 3}
   Type: 6
-  Description: 
+  Description: Better sword.
   ItemReference:
     Name: Sword 1
     Id: 9
@@ -22,3 +22,5 @@ MonoBehaviour:
     - Attribute: 0
       Value: 10
     Reference: {fileID: 11400000}
+    MaxStack: 0
+  MaxStack: 0

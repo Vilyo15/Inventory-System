@@ -8,6 +8,7 @@ public class PlayerBaseScriptableObject : ScriptableObject
     public Player Player = new Player("Todd");
 
 
+
     public void Clear()
     {
         Player = new Player(Player.Name);

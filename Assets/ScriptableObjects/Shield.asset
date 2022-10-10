@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sprite: {fileID: 21300000, guid: 5b3a0da84bb04314e85c48e382ff2e62, type: 3}
   Type: 3
-  Description: 
+  Description: Captain america
   ItemReference:
     Name: Shield
     Id: 7
@@ -22,3 +22,5 @@ MonoBehaviour:
     - Attribute: 1
       Value: 5
     Reference: {fileID: 11400000}
+    MaxStack: 0
+  MaxStack: 0

@@ -11,16 +11,21 @@ using TMPro;
 public abstract class UserInterfaceBase : MonoBehaviour
 {
     [SerializeField] private InventoryScriptableObject _inventory;
-
     [SerializeField] private RectTransform _mouseObject;
     [SerializeField] private ExistingItemsScriptableObject list;
     [SerializeField] private GameObject _interfaceSlotPrefab;
-    [SerializeField] private ItemObject itemPrefab;
-    private Image _mouseImage;
+    [SerializeField] private ItemObject _itemPrefab;
+    [SerializeField] private GameObject _tooltip;
+    [SerializeField] private GameObject _playerObject;
+        
+
     private Dictionary<GameObject, InventorySlot> _inventoryUI;
     private MouseItem _mouseItem = new MouseItem();
     private InterfaceType _type;
-
+    private WaitForSeconds _waitForOneSecond = new WaitForSeconds(1);
+    private bool _isHovering;
+    private GameObject _hoveredSlot;
+    private PlayerControls _playerInput;
     public InterfaceType Type { get { return _type; } set { _type = value; } }
     public ExistingItemsScriptableObject List { get { return list; } }
     public InventoryScriptableObject Inventory { get { return _inventory; } set { _inventory = value; } }
@@ -30,10 +35,11 @@ public abstract class UserInterfaceBase : MonoBehaviour
     public event Action onUpdate, beforeUpdate;
 
     // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
+        _playerInput = new PlayerControls();
         _inventoryUI = new Dictionary<GameObject, InventorySlot>();
-        _mouseImage = _mouseObject.GetComponent<Image>();
+
         PopulateInventory();
         for (int i = 0; i < _inventory.Inventory.InventoryObject.Length; i++)
         {
@@ -45,6 +51,8 @@ public abstract class UserInterfaceBase : MonoBehaviour
 
         AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnEnterInterface(gameObject); });
         AddEvent(gameObject, EventTriggerType.PointerExit, delegate { OnExitInterface(gameObject); });
+
+        _playerInput.UserInterface.DropItem.started += DropItemAtPlayer;
     }
 
     protected abstract void PopulateInventory();
@@ -83,34 +91,36 @@ public abstract class UserInterfaceBase : MonoBehaviour
     protected void OnEnter(GameObject obj)
     {
         MouseData.slotHoveredOver = obj;
+        if (_inventoryUI[obj].Item.Id != -1)
+        {
+            StartCoroutine(ShowTooltip(obj));
+        }
+        _isHovering = true;
+        _hoveredSlot = obj;
     }
     protected void OnExit(GameObject obj)
     {
         _mouseItem.HoverObj = null;
         _mouseItem.HoverItem = null;
+        StopCoroutine(ShowTooltip(obj));
+        _tooltip.SetActive(false);
+        _isHovering = false;
     }
-    //protected void OnDragStart(GameObject obj)
-    //{
-    //    _mouseObject.gameObject.SetActive(true);
-    //    _mouseObject.sizeDelta = new Vector2(50, 50);
-    //    _mouseObject.transform.SetParent(transform.parent);
-    //    if (_inventoryUI[obj].Item.Id >= 0)
-    //    {
 
-    //        _mouseImage.sprite = list.GetItem[_inventoryUI[obj].Item.Id].Sprite;
-    //        _mouseImage.raycastTarget = false;
-    //    }
-    //    _mouseItem.Obj = _mouseObject.gameObject;
-    //    _mouseItem.Item = _inventoryUI[obj];
-    //    MouseData.tempItemBeingDragged = _mouseObject.gameObject;
-    //}
+    protected void OnSelect(GameObject obj)
+    {
+     
+    }
+ 
     public void OnDragStart(GameObject obj)
     {
         MouseData.tempItemBeingDragged = CreateTempItem(obj);
         obj.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
     }
+
     protected void OnDragEnd(GameObject obj)
     {
+      
         Destroy(MouseData.tempItemBeingDragged);
         if (_mouseItem.HoverObj)
         {
@@ -121,9 +131,6 @@ public abstract class UserInterfaceBase : MonoBehaviour
         if (MouseData.interfaceMouseIsOver == null)
         {
             SpawnDroppedItem(obj);
-            _inventoryUI[obj].RemoveItem();
-
-
 
         }
         if (MouseData.slotHoveredOver && MouseData.interfaceMouseIsOver != null)
@@ -132,9 +139,7 @@ public abstract class UserInterfaceBase : MonoBehaviour
             _inventory.MoveItem(_inventoryUI[obj], mouseHoverSlotData);
         }
         obj.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-        //_mouseItem.Obj.SetActive(false);
 
-        //_mouseItem.Item = null;
     }
     protected void OnDrag(GameObject obj)
     {
@@ -145,28 +150,23 @@ public abstract class UserInterfaceBase : MonoBehaviour
     protected void OnEnterInterface(GameObject obj)
     {
         MouseData.interfaceMouseIsOver = obj.GetComponent<UserInterfaceBase>();
+        
     }
     protected void OnExitInterface(GameObject obj)
     {
         MouseData.interfaceMouseIsOver = null;
+        
     }
-    
-    public void Test()
-    {
-        Debug.Log("test worked");
-    }    
+      
 
     protected void SpawnDroppedItem(GameObject obj)
     {
         Vector3 mousePos = Mouse.current.position.ReadValue();
         mousePos.z = Camera.main.nearClipPlane;
         Vector3 Worldpos = Camera.main.ScreenToWorldPoint(mousePos);
-        Debug.Log(itemPrefab.Item);
-        itemPrefab.Item = _inventoryUI[obj].Item.Reference;
-        GameObject temp = Instantiate(itemPrefab.gameObject, Worldpos, Quaternion.identity, null);
-
-
-
+        _itemPrefab.Item = _inventoryUI[obj].Item.Reference;
+        GameObject temp = Instantiate(_itemPrefab.gameObject, Worldpos, Quaternion.identity, null);
+        _inventoryUI[obj].RemoveItem();
     }
     private GameObject CreateTempItem(GameObject obj)
     {
@@ -197,6 +197,47 @@ public abstract class UserInterfaceBase : MonoBehaviour
         return tempItem;
     }
 
+    IEnumerator ShowTooltip(GameObject obj)
+    {
+        _tooltip.SetActive(true);
+        _tooltip.GetComponentInChildren<TextMeshProUGUI>().text = _inventoryUI[obj].Item.Reference.Description;
+        yield return null;
+    }
+
+    private void DropItemAtPlayer(InputAction.CallbackContext context)
+    {
+        if (_isHovering && _inventoryUI[_hoveredSlot].Item.Id != -1 && this.Type == InterfaceType.Inventory)
+        {
+
+            Vector3 Worldpos = _playerObject.transform.position + new Vector3(2, 2, 0);
+            _itemPrefab.Item = _inventoryUI[_hoveredSlot].Item.Reference;
+            GameObject temp = Instantiate(_itemPrefab.gameObject, Worldpos, Quaternion.identity, null);
+            _inventoryUI[_hoveredSlot].RemoveItem();
+        }    
+    }
+
+    private void UpdateInventoryUI()
+    {
+        for (int i = 0; i < _inventory.Inventory.InventoryObject.Length; i++)
+        {
+            if (this._type == InterfaceType.Inventory)
+            {
+                OnSlotUpdate(_inventory.Inventory.InventoryObject[i]);
+            }    
+        }
+    }
+
+    private void OnEnable()
+    {
+        _playerInput.UserInterface.Enable();
+        Debug.Log("hello");
+       UpdateInventoryUI(); 
+    }
+    private void OnDisable()
+    {
+        _playerInput.UserInterface.Disable();
+        Destroy(MouseData.tempItemBeingDragged);
+    }
 }
 
 public class MouseItem

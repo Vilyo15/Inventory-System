@@ -145,6 +145,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DropItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""a0b239e2-f8e7-4c70-b379-0be9fcf8c8b2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpawnItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""555bcef5-c09c-4198-bba2-83976279dc6b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -180,6 +198,28 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""AttributeScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e6bb36b1-febc-4fda-83cd-d384b5db67e0"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DropItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""99bbae79-8056-43f3-9314-a15e653163f3"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpawnItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -195,6 +235,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_UserInterface_InventoryScreen = m_UserInterface.FindAction("InventoryScreen", throwIfNotFound: true);
         m_UserInterface_EquipmentScreen = m_UserInterface.FindAction("EquipmentScreen", throwIfNotFound: true);
         m_UserInterface_AttributeScreen = m_UserInterface.FindAction("AttributeScreen", throwIfNotFound: true);
+        m_UserInterface_DropItem = m_UserInterface.FindAction("DropItem", throwIfNotFound: true);
+        m_UserInterface_SpawnItem = m_UserInterface.FindAction("SpawnItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -298,6 +340,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_UserInterface_InventoryScreen;
     private readonly InputAction m_UserInterface_EquipmentScreen;
     private readonly InputAction m_UserInterface_AttributeScreen;
+    private readonly InputAction m_UserInterface_DropItem;
+    private readonly InputAction m_UserInterface_SpawnItem;
     public struct UserInterfaceActions
     {
         private @PlayerControls m_Wrapper;
@@ -305,6 +349,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @InventoryScreen => m_Wrapper.m_UserInterface_InventoryScreen;
         public InputAction @EquipmentScreen => m_Wrapper.m_UserInterface_EquipmentScreen;
         public InputAction @AttributeScreen => m_Wrapper.m_UserInterface_AttributeScreen;
+        public InputAction @DropItem => m_Wrapper.m_UserInterface_DropItem;
+        public InputAction @SpawnItem => m_Wrapper.m_UserInterface_SpawnItem;
         public InputActionMap Get() { return m_Wrapper.m_UserInterface; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -323,6 +369,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @AttributeScreen.started -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnAttributeScreen;
                 @AttributeScreen.performed -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnAttributeScreen;
                 @AttributeScreen.canceled -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnAttributeScreen;
+                @DropItem.started -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnDropItem;
+                @DropItem.performed -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnDropItem;
+                @DropItem.canceled -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnDropItem;
+                @SpawnItem.started -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnSpawnItem;
+                @SpawnItem.performed -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnSpawnItem;
+                @SpawnItem.canceled -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnSpawnItem;
             }
             m_Wrapper.m_UserInterfaceActionsCallbackInterface = instance;
             if (instance != null)
@@ -336,6 +388,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @AttributeScreen.started += instance.OnAttributeScreen;
                 @AttributeScreen.performed += instance.OnAttributeScreen;
                 @AttributeScreen.canceled += instance.OnAttributeScreen;
+                @DropItem.started += instance.OnDropItem;
+                @DropItem.performed += instance.OnDropItem;
+                @DropItem.canceled += instance.OnDropItem;
+                @SpawnItem.started += instance.OnSpawnItem;
+                @SpawnItem.performed += instance.OnSpawnItem;
+                @SpawnItem.canceled += instance.OnSpawnItem;
             }
         }
     }
@@ -350,5 +408,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnInventoryScreen(InputAction.CallbackContext context);
         void OnEquipmentScreen(InputAction.CallbackContext context);
         void OnAttributeScreen(InputAction.CallbackContext context);
+        void OnDropItem(InputAction.CallbackContext context);
+        void OnSpawnItem(InputAction.CallbackContext context);
     }
 }

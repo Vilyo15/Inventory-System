@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sprite: {fileID: 545464865608939743, guid: 12d15a77d2f62444f89d85f5358e1b9e, type: 3}
   Type: 2
-  Description: 
+  Description: Chest armor.
   ItemReference:
     Name: Chest
     Id: 3
@@ -22,3 +22,5 @@ MonoBehaviour:
     - Attribute: 1
       Value: 8
     Reference: {fileID: 11400000}
+    MaxStack: 0
+  MaxStack: 0

@@ -10,6 +10,7 @@ public class EquipScreenUI : UserInterfaceBase
     [SerializeField] private PlayerBaseScriptableObject _player;
 
     public GameObject[] EquipSlots { get { return _equipSlots; } }
+    public PlayerBaseScriptableObject Player { get { return _player; } }
     protected override void PopulateInventory()
     {
         Type = InterfaceType.Equipment;
@@ -35,10 +36,11 @@ public class EquipScreenUI : UserInterfaceBase
 
     }
 
-    private void Awake()
+    private void Start()
     {
         onUpdate += UpdatePlayerAttributes;
         beforeUpdate += RemovePlayerAttributes;
+        UpdatePlayerAttributes();
     }
 
     private void RemovePlayerAttributes()

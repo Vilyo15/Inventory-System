@@ -49,12 +49,39 @@ public class InventorySlot
     }
     public void RemoveItem()
     {
+        if(Amount == 1)
+        {
+            UpdateSlot(new Item(), 0);
+        }
+        else if (Amount >= 0)
+        {
+            
+            int amount = Amount - 1 ;
+            UpdateSlot(Item, amount);
+        }
         
-        UpdateSlot(new Item(), 0);
     }
     public void AddAmount(int value)
     {
-        UpdateSlot(Item, Amount += value);
+        if (Item.MaxStack == 0) 
+        {
+            UpdateSlot(Item, Amount += value);
+           
+        }
+        else
+        {
+            
+            if (Amount > Item.MaxStack)
+            {
+
+                Parent.Inventory.AddItem(Item, 1);
+            }
+            else
+            {
+
+                UpdateSlot(Item, Amount += value);
+            }
+        }
     }
 
 
