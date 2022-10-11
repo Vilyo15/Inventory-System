@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47d564c6ed22a2043b5f06953655c8fe, type: 3}
+  m_Name: Chest
+  m_EditorClassIdentifier: 
+  Sprite: {fileID: 545464865608939743, guid: 12d15a77d2f62444f89d85f5358e1b9e, type: 3}
+  Type: 2
+  Description: Chest armor.
+  ItemReference:
+    Name: Chest
+    Id: 3
+    Buffs:
+    - Attribute: 1
+      Value: 8
+    Reference: {fileID: 11400000}
+    MaxStack: 0
+  MaxStack: 0
