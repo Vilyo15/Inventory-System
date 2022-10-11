@@ -25,7 +25,8 @@ public class EquipScreenUI : UserInterfaceBase
             AddEvent(obj, EventTriggerType.BeginDrag, delegate { OnDragStart(obj); });
             AddEvent(obj, EventTriggerType.EndDrag, delegate { OnDragEnd(obj); });
             AddEvent(obj, EventTriggerType.Drag, delegate { OnDrag(obj); });
-            obj.AddComponent<MyRightClickClass>();
+            var temp = obj.AddComponent<MyRightClickClass>();
+            temp.SetParent(Type);
 
             Inventory.Inventory.InventoryObject[i].gameObjectParent = obj;
             InventoryUI.Add(obj, Inventory.Inventory.InventoryObject[i]);

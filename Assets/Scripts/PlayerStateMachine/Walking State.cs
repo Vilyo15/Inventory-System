@@ -9,6 +9,7 @@ public class WalkingState : BaseState
     {
         if (!Context.IsMovementPressed)
         {
+            Debug.Log("is not movement pressed");
             SwitchState(Factory.Idle());
         }
         else if (Context.IsMovementPressed && Context.IsRunPressed)
@@ -31,6 +32,7 @@ public class WalkingState : BaseState
 
     public override void UpdateState()
     {
+        Debug.Log("stillwalking");
         CheckSwitchState();
         Context.AppliedMovementX = Context.CurrentMovementInput.x;
         Context.AppliedMovementY = Context.CurrentMovementInput.y;

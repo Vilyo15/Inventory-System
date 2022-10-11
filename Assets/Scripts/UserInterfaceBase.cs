@@ -43,7 +43,6 @@ public abstract class UserInterfaceBase : MonoBehaviour
         PopulateInventory();
         for (int i = 0; i < _inventory.Inventory.InventoryObject.Length; i++)
         {
-            //_inventory.Inventory.InventoryObject[i].Parent = this;
             _inventory.Inventory.InventoryObject[i].OnAfterUpdate += OnSlotUpdate;
             _inventory.Inventory.InventoryObject[i].OnBeforeUpdate += OnBeforeUpdate;
 
@@ -216,7 +215,7 @@ public abstract class UserInterfaceBase : MonoBehaviour
         }    
     }
 
-    private void UpdateInventoryUI()
+    protected void UpdateInventoryUI()
     {
         for (int i = 0; i < _inventory.Inventory.InventoryObject.Length; i++)
         {
@@ -231,7 +230,7 @@ public abstract class UserInterfaceBase : MonoBehaviour
     {
         _playerInput.UserInterface.Enable();
         Debug.Log("hello");
-       UpdateInventoryUI(); 
+        UpdateInventoryUI(); 
     }
     private void OnDisable()
     {

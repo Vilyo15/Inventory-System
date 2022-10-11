@@ -82,8 +82,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        CheckDirection();
         _currentState.UpdateState();
-        CheckDirection(); 
+         
     }
 
     private void FixedUpdate()
@@ -114,19 +115,20 @@ public class PlayerController : MonoBehaviour
 
     private void CheckDirection()
     {
-        if (_appliedMovement.x == 1 && _appliedMovement.y == 0)
+        Debug.Log("checkingdirection");
+        if (_appliedMovement.x >= 1 && _appliedMovement.y == 0)
         {
             _directionValue = 2;
         }
-        else if (_appliedMovement.x == -1 && _appliedMovement.y == 0)
+        else if (_appliedMovement.x <= -1 && _appliedMovement.y == 0)
         {
             _directionValue = 4;
         }
-        else if(_appliedMovement.x == 0 && _appliedMovement.y == 1)
+        else if(_appliedMovement.x == 0 && _appliedMovement.y >= 1)
         {
             _directionValue = 1;
         }
-        else if (_appliedMovement.x == 0 && _appliedMovement.y == -1)
+        else if (_appliedMovement.x == 0 && _appliedMovement.y <= -1)
         {
             _directionValue = 3;
         }

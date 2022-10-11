@@ -9,13 +9,25 @@ public class MyRightClickClass : MonoBehaviour, IPointerClickHandler
     private InventoryUI _referenceInventory;
     private EquipScreenUI _referenceEquip;
 
+    public void SetParent(InterfaceType type)
+    {
+        _parentType = type;
+    }
 
     private void Start()
     {
-        _mainParent = transform.parent.parent.GetComponent<UIController>();
-        _parentType = transform.parent.GetComponent<UserInterfaceBase>().Type;
-        _referenceInventory = _mainParent.InventoryScreen;
-        _referenceEquip = _mainParent.EquipmentScreen;
+        if ( _parentType == InterfaceType.Inventory)
+        {
+            _mainParent = transform.parent.parent.parent.parent.GetComponent<UIController>();
+            _referenceInventory = _mainParent.InventoryScreen;
+            _referenceEquip = _mainParent.EquipmentScreen;
+        }
+        else if (_parentType == InterfaceType.Equipment)
+        {
+            _mainParent = transform.parent.parent.GetComponent<UIController>();
+            _referenceInventory = _mainParent.InventoryScreen;
+            _referenceEquip = _mainParent.EquipmentScreen;
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)

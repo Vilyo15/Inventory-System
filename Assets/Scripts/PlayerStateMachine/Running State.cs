@@ -7,7 +7,7 @@ public class RunningState : BaseState
     public RunningState(PlayerController context, StateFactory factory) : base(context, factory) { }
     public override void CheckSwitchState()
     {
-        if (!Context.IsMovementPressed)
+        if (!Context.IsMovementPressed && !Context.IsRunPressed)
         {
             SwitchState(Factory.Idle());
         }
@@ -31,6 +31,7 @@ public class RunningState : BaseState
     
     public override void UpdateState()
     {
+        Debug.Log("stillrunning" + Context.DirectionValue);
         CheckSwitchState();
         Context.AppliedMovementX = Context.CurrentMovementInput.x * Context.RunMultiplier;
         Context.AppliedMovementY = Context.CurrentMovementInput.y * Context.RunMultiplier;

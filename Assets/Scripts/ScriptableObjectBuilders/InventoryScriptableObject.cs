@@ -7,19 +7,21 @@ public class InventoryScriptableObject : ScriptableObject
 {
     public Inventory Inventory;
     public bool UpdateInventory = false;
-    public void AddItem(Item _item, int _amount)
+    public Item tempItem;
+    public int tempAmount;
+    public void AddItem(Item item, int amount)
     {
         
-        if (_item.Reference.Type == ItemType.Material || _item.Reference.Type == ItemType.Consumable)
+        if (item.Reference.Type == ItemType.Material || item.Reference.Type == ItemType.Consumable)
         {
             for (int i = 0; i < Inventory.InventoryObject.Length; i++)
             {
-                if (Inventory.InventoryObject[i].Item.Id == _item.Id && Inventory.InventoryObject[i].Amount < Inventory.InventoryObject[i].Item.MaxStack)
+                if (Inventory.InventoryObject[i].Item.Id == item.Id && Inventory.InventoryObject[i].Amount < Inventory.InventoryObject[i].Item.MaxStack)
                 {
-                    Inventory.InventoryObject[i].AddAmount(_amount);
+                    Inventory.InventoryObject[i].AddAmount(amount);
                     return;
                 }
-                else if(Inventory.InventoryObject[i].Item.Id == _item.Id)
+                else if(Inventory.InventoryObject[i].Item.Id == item.Id)
                 {
                     if (Inventory.InventoryObject[i].Amount == Inventory.InventoryObject[i].Item.MaxStack)
                     {
@@ -27,7 +29,7 @@ public class InventoryScriptableObject : ScriptableObject
                     }
                     else
                     {
-                        Inventory.InventoryObject[i].AddAmount(_amount);
+                        Inventory.InventoryObject[i].AddAmount(amount);
                         return;
                     }
                     
@@ -39,31 +41,38 @@ public class InventoryScriptableObject : ScriptableObject
         else
         {
 
-            SetEmptySlot(_item, _amount);
+            SetEmptySlot(item, amount);
             return;
         }
 
-        SetEmptySlot(_item, _amount);
+        SetEmptySlot(item, amount);
 
     }
-    public InventorySlot SetEmptySlot(Item _item, int _amount)
+    public InventorySlot SetEmptySlot(Item item, int amount)
     {
-        bool fullness = false;
+        Debug.Log("emptyslot start");
+
         for (int i = 0; i < Inventory.InventoryObject.Length; i++)
         {
             if (Inventory.InventoryObject[i].Item.Id <= -1)
             {
-                Inventory.InventoryObject[i].UpdateSlot(_item, _amount);
+                Inventory.InventoryObject[i].UpdateSlot(item, amount);
                 return Inventory.InventoryObject[i];
+                
                 
             }
             
+            
         }
-        InventorySlot[] temp = new InventorySlot[32];
-        Inventory.InventoryObject.CopyTo(temp, 0);
-        Inventory.InventoryObject = temp;
+
+        Debug.Log("emptyslot end");
+        
+        
         UpdateInventory = true;
-        //set up functionality for full inventory
+        tempAmount = amount;
+        tempItem = item;
+        
+
         return null;
     }
 

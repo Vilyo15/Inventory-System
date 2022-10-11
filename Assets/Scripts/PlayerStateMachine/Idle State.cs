@@ -20,8 +20,10 @@ public class IdleState : BaseState
 
     public override void EnterState()
     {
+        Debug.Log("entered idle");
         Context.Animator.SetBool(Context.IsWalkingHash, false);
         Context.Animator.SetBool(Context.IsRunningHash, false);
+        
         Context.AppliedMovementX = 0;
         Context.AppliedMovementY = 0;
     }
@@ -34,6 +36,7 @@ public class IdleState : BaseState
     public override void UpdateState()
     {
         CheckSwitchState();
+        Context.Animator.SetInteger(Context.DirectionHash, 0);
     }
 
     
