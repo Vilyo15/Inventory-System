@@ -163,6 +163,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ExitGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""cb6c2add-476c-4d5c-a8f0-54ff75c798ae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EquipItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""7acba0b4-76d5-4545-8ff2-f72e2afd6e39"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -220,6 +238,28 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""SpawnItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a80aae54-634c-47e5-988f-76a4dc8d9533"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExitGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c4ebecf-cc35-4931-bc7c-af730d604a9a"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EquipItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -237,6 +277,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_UserInterface_AttributeScreen = m_UserInterface.FindAction("AttributeScreen", throwIfNotFound: true);
         m_UserInterface_DropItem = m_UserInterface.FindAction("DropItem", throwIfNotFound: true);
         m_UserInterface_SpawnItem = m_UserInterface.FindAction("SpawnItem", throwIfNotFound: true);
+        m_UserInterface_ExitGame = m_UserInterface.FindAction("ExitGame", throwIfNotFound: true);
+        m_UserInterface_EquipItem = m_UserInterface.FindAction("EquipItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -342,6 +384,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_UserInterface_AttributeScreen;
     private readonly InputAction m_UserInterface_DropItem;
     private readonly InputAction m_UserInterface_SpawnItem;
+    private readonly InputAction m_UserInterface_ExitGame;
+    private readonly InputAction m_UserInterface_EquipItem;
     public struct UserInterfaceActions
     {
         private @PlayerControls m_Wrapper;
@@ -351,6 +395,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @AttributeScreen => m_Wrapper.m_UserInterface_AttributeScreen;
         public InputAction @DropItem => m_Wrapper.m_UserInterface_DropItem;
         public InputAction @SpawnItem => m_Wrapper.m_UserInterface_SpawnItem;
+        public InputAction @ExitGame => m_Wrapper.m_UserInterface_ExitGame;
+        public InputAction @EquipItem => m_Wrapper.m_UserInterface_EquipItem;
         public InputActionMap Get() { return m_Wrapper.m_UserInterface; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -375,6 +421,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SpawnItem.started -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnSpawnItem;
                 @SpawnItem.performed -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnSpawnItem;
                 @SpawnItem.canceled -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnSpawnItem;
+                @ExitGame.started -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnExitGame;
+                @ExitGame.performed -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnExitGame;
+                @ExitGame.canceled -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnExitGame;
+                @EquipItem.started -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnEquipItem;
+                @EquipItem.performed -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnEquipItem;
+                @EquipItem.canceled -= m_Wrapper.m_UserInterfaceActionsCallbackInterface.OnEquipItem;
             }
             m_Wrapper.m_UserInterfaceActionsCallbackInterface = instance;
             if (instance != null)
@@ -394,6 +446,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SpawnItem.started += instance.OnSpawnItem;
                 @SpawnItem.performed += instance.OnSpawnItem;
                 @SpawnItem.canceled += instance.OnSpawnItem;
+                @ExitGame.started += instance.OnExitGame;
+                @ExitGame.performed += instance.OnExitGame;
+                @ExitGame.canceled += instance.OnExitGame;
+                @EquipItem.started += instance.OnEquipItem;
+                @EquipItem.performed += instance.OnEquipItem;
+                @EquipItem.canceled += instance.OnEquipItem;
             }
         }
     }
@@ -410,5 +468,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnAttributeScreen(InputAction.CallbackContext context);
         void OnDropItem(InputAction.CallbackContext context);
         void OnSpawnItem(InputAction.CallbackContext context);
+        void OnExitGame(InputAction.CallbackContext context);
+        void OnEquipItem(InputAction.CallbackContext context);
     }
 }

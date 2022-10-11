@@ -1,29 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+/// <summary>
+/// component that gets added to slots that detects rightclick/middle click and acts accordingly
+/// </summary>
 public class MyRightClickClass : MonoBehaviour, IPointerClickHandler
 {
+    //references
     private InterfaceType _parentType;
     private UIController _mainParent;
     private InventoryUI _referenceInventory;
     private EquipScreenUI _referenceEquip;
 
+    public void SetParent(InterfaceType type)
+    {
+        _parentType = type;
+    }
 
     private void Start()
     {
-        _mainParent = transform.parent.parent.GetComponent<UIController>();
-        _parentType = transform.parent.GetComponent<UserInterfaceBase>().Type;
-        _referenceInventory = _mainParent.InventoryScreen;
-        _referenceEquip = _mainParent.EquipmentScreen;
+        if (_parentType == InterfaceType.Inventory)
+        {
+            _mainParent = transform.parent.parent.parent.parent.GetComponent<UIController>();
+            _referenceInventory = _mainParent.InventoryScreen;
+            _referenceEquip = _mainParent.EquipmentScreen;
+        }
+        else if (_parentType == InterfaceType.Equipment)
+        {
+            _mainParent = transform.parent.parent.GetComponent<UIController>();
+            _referenceInventory = _mainParent.InventoryScreen;
+            _referenceEquip = _mainParent.EquipmentScreen;
+        }
     }
 
+    //on pointer click event function
     public void OnPointerClick(PointerEventData eventData)
     {
 
         if (_parentType == InterfaceType.Inventory)
         {
-
+            //if rightclick on inventory move item to equip
             if (eventData.button == PointerEventData.InputButton.Right)
             {
                 if (!_referenceEquip.gameObject.activeSelf)
@@ -51,9 +67,11 @@ public class MyRightClickClass : MonoBehaviour, IPointerClickHandler
                         }
                     }
                 }
-                
+
             }
+            //if middleclick on inventory consume item
             if (eventData.button == PointerEventData.InputButton.Middle)
+            {
                 if (_referenceInventory.InventoryUI[gameObject].Item.Reference.Type == ItemType.Consumable && _referenceInventory.InventoryUI[gameObject].Item.Id != -1)
                 {
                     for (int j = 0; j < _referenceInventory.InventoryUI[gameObject].Item.Buffs.Length; j++)
@@ -71,8 +89,9 @@ public class MyRightClickClass : MonoBehaviour, IPointerClickHandler
                     }
                     _referenceInventory.InventoryUI[gameObject].RemoveItem();
                 }
-
+            }
         }
+        //if rightclick on equipment screen move item to inventory.
         else if (_parentType == InterfaceType.Equipment)
         {
 

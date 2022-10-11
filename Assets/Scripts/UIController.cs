@@ -1,10 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
+/// <summary>
+/// listens to events and contains button functions for turning on/off user interface windows
+/// </summary>
 public class UIController : MonoBehaviour
 {
+    //serialized references
     [SerializeField] private GameObject _inventoryScreen;
     [SerializeField] private GameObject _equipmentScreen;
     [SerializeField] private GameObject _attributeScreen;
@@ -12,27 +14,31 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject _equipmentButton;
     [SerializeField] private GameObject _attributeButton;
 
+    //input
     private PlayerControls _playerInput;
+
+    // getters
     public InventoryUI InventoryScreen { get { return _inventoryScreen.GetComponent<InventoryUI>(); } }
     public EquipScreenUI EquipmentScreen { get { return _equipmentScreen.GetComponent<EquipScreenUI>(); } }
- 
+
 
     // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
         _playerInput = new PlayerControls();
 
         _playerInput.UserInterface.InventoryScreen.started += OnIPress;
-        
+
         _playerInput.UserInterface.EquipmentScreen.started += OnCPress;
-        
+
         _playerInput.UserInterface.AttributeScreen.started += OnHPress;
-        
+
+        _playerInput.UserInterface.ExitGame.started += OnEscapePress;
     }
 
     private void OnHPress(InputAction.CallbackContext context)
     {
-      
+
         if (!_attributeScreen.activeSelf)
         {
             AttributeScreenActivate(true);
@@ -41,7 +47,7 @@ public class UIController : MonoBehaviour
         {
             AttributeScreenActivate(false);
         }
-        
+
     }
 
     private void OnCPress(InputAction.CallbackContext context)
@@ -66,6 +72,12 @@ public class UIController : MonoBehaviour
         {
             InventoryScreenActivate(false);
         }
+
+    }
+
+    private void OnEscapePress(InputAction.CallbackContext context)
+    {
+        Application.Quit();
     }
 
 

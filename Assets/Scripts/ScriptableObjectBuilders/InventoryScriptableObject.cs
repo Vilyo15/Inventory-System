@@ -1,25 +1,31 @@
-    using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// scriptable object that holds all data associated with an inventory object,
+/// a unique one must be created for each use (inventory, equip, storage..)
+/// </summary>
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
 public class InventoryScriptableObject : ScriptableObject
 {
     public Inventory Inventory;
     public bool UpdateInventory = false;
-    public void AddItem(Item _item, int _amount)
+    public Item tempItem;
+    public int tempAmount;
+
+    //adds an item to the inventory (on pickup), if item ID already pressent adds to the stack
+    public void AddItem(Item item, int amount)
     {
-        
-        if (_item.Reference.Type == ItemType.Material || _item.Reference.Type == ItemType.Consumable)
+
+        if (item.Reference.Type == ItemType.Material || item.Reference.Type == ItemType.Consumable)
         {
             for (int i = 0; i < Inventory.InventoryObject.Length; i++)
             {
-                if (Inventory.InventoryObject[i].Item.Id == _item.Id && Inventory.InventoryObject[i].Amount < Inventory.InventoryObject[i].Item.MaxStack)
+                if (Inventory.InventoryObject[i].Item.Id == item.Id && Inventory.InventoryObject[i].Amount < Inventory.InventoryObject[i].Item.MaxStack)
                 {
-                    Inventory.InventoryObject[i].AddAmount(_amount);
+                    Inventory.InventoryObject[i].AddAmount(amount);
                     return;
                 }
-                else if(Inventory.InventoryObject[i].Item.Id == _item.Id)
+                else if (Inventory.InventoryObject[i].Item.Id == item.Id)
                 {
                     if (Inventory.InventoryObject[i].Amount == Inventory.InventoryObject[i].Item.MaxStack)
                     {
@@ -27,48 +33,56 @@ public class InventoryScriptableObject : ScriptableObject
                     }
                     else
                     {
-                        Inventory.InventoryObject[i].AddAmount(_amount);
+                        Inventory.InventoryObject[i].AddAmount(amount);
                         return;
                     }
-                    
+
                 }
-                
-                
+
+
             }
         }
         else
         {
 
-            SetEmptySlot(_item, _amount);
+            SetEmptySlot(item, amount);
             return;
         }
 
-        SetEmptySlot(_item, _amount);
+        SetEmptySlot(item, amount);
 
     }
-    public InventorySlot SetEmptySlot(Item _item, int _amount)
+
+    //if no item present or stack is ful, it adds the item to the next empty slot, if no empty slot
+    //triggers expand inventory.
+    public InventorySlot SetEmptySlot(Item item, int amount)
     {
-        bool fullness = false;
+
         for (int i = 0; i < Inventory.InventoryObject.Length; i++)
         {
             if (Inventory.InventoryObject[i].Item.Id <= -1)
             {
-                Inventory.InventoryObject[i].UpdateSlot(_item, _amount);
+                Inventory.InventoryObject[i].UpdateSlot(item, amount);
                 return Inventory.InventoryObject[i];
-                
+
+
             }
-            
+
+
         }
-        InventorySlot[] temp = new InventorySlot[32];
-        Inventory.InventoryObject.CopyTo(temp, 0);
-        Inventory.InventoryObject = temp;
+
         UpdateInventory = true;
-        //set up functionality for full inventory
+        tempAmount = amount;
+        tempItem = item;
+
+
         return null;
     }
 
+    //moves item from one slot to a different one
     public void MoveItem(InventorySlot item1, InventorySlot item2)
     {
+        Debug.Log((item2.CanPlaceInSlot(item1.ItemObject) + " " + item1.CanPlaceInSlot(item2.ItemObject)));
         if (item2.CanPlaceInSlot(item1.ItemObject) && item1.CanPlaceInSlot(item2.ItemObject))
         {
             InventorySlot temp = new InventorySlot(item2.Item, item2.Amount);
@@ -77,7 +91,7 @@ public class InventoryScriptableObject : ScriptableObject
         }
     }
 
-
+    //generates a new empty inventory
     public void Clear()
     {
         Inventory = new Inventory();

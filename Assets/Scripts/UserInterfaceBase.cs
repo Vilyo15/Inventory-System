@@ -1,15 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using TMPro;
+using UnityEngine.UI;
 
+
+/// <summary>
+/// base of all user interfaces that contain item slots
+/// </summary>
 public abstract class UserInterfaceBase : MonoBehaviour
 {
+
+    //serialized fields for references and prefabs
     [SerializeField] private InventoryScriptableObject _inventory;
     [SerializeField] private RectTransform _mouseObject;
     [SerializeField] private ExistingItemsScriptableObject list;
@@ -17,24 +23,33 @@ public abstract class UserInterfaceBase : MonoBehaviour
     [SerializeField] private ItemObject _itemPrefab;
     [SerializeField] private GameObject _tooltip;
     [SerializeField] private GameObject _playerObject;
-        
+    [SerializeField] private EquipScreenUI _referenceEquip;
+    [SerializeField] private UIController _mainParent;
+    [SerializeField] private InventoryUI _referenceInventory;
 
+    //main inventory dictionary for inventory slots
     private Dictionary<GameObject, InventorySlot> _inventoryUI;
-    private MouseItem _mouseItem = new MouseItem();
+
+    //define the type of interface, either inventory or equipment (can add more later like storage)
     private InterfaceType _type;
-    private WaitForSeconds _waitForOneSecond = new WaitForSeconds(1);
+
+    //variables to detect hovering, used for tooltips
     private bool _isHovering;
-    private GameObject _hoveredSlot;
+
+
+    //player input
     private PlayerControls _playerInput;
+
+    //getters and setters
     public InterfaceType Type { get { return _type; } set { _type = value; } }
     public ExistingItemsScriptableObject List { get { return list; } }
     public InventoryScriptableObject Inventory { get { return _inventory; } set { _inventory = value; } }
     public GameObject InterfaceSlotPrefab { get { return _interfaceSlotPrefab; } }
     public Dictionary<GameObject, InventorySlot> InventoryUI { get { return _inventoryUI; } }
 
+    //events for updating the inventory slots
     public event Action onUpdate, beforeUpdate;
 
-    // Start is called before the first frame update
     private void Awake()
     {
         _playerInput = new PlayerControls();
@@ -43,7 +58,6 @@ public abstract class UserInterfaceBase : MonoBehaviour
         PopulateInventory();
         for (int i = 0; i < _inventory.Inventory.InventoryObject.Length; i++)
         {
-            //_inventory.Inventory.InventoryObject[i].Parent = this;
             _inventory.Inventory.InventoryObject[i].OnAfterUpdate += OnSlotUpdate;
             _inventory.Inventory.InventoryObject[i].OnBeforeUpdate += OnBeforeUpdate;
 
@@ -53,8 +67,20 @@ public abstract class UserInterfaceBase : MonoBehaviour
         AddEvent(gameObject, EventTriggerType.PointerExit, delegate { OnExitInterface(gameObject); });
 
         _playerInput.UserInterface.DropItem.started += DropItemAtPlayer;
+        _playerInput.UserInterface.EquipItem.started += EquipHoverItem;
+    }
+    private void OnEnable()
+    {
+        _playerInput.UserInterface.Enable();
+        UpdateInventoryUI();
+    }
+    private void OnDisable()
+    {
+        _playerInput.UserInterface.Disable();
+        Destroy(MouseData.tempItemBeingDragged);
     }
 
+    //each interface type uses a different populate function
     protected abstract void PopulateInventory();
 
     protected void OnBeforeUpdate()
@@ -66,19 +92,20 @@ public abstract class UserInterfaceBase : MonoBehaviour
     {
         if (_slot.Item.Id >= 0)
         {
-            _slot.gameObjectParent.transform.GetChild(0).GetComponentInChildren<Image>().sprite = _slot.ItemObject.Sprite;
-            _slot.gameObjectParent.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1);
-            _slot.gameObjectParent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = _slot.Amount == 1 ? "" : _slot.Amount.ToString("n0");
+            _slot.GameObjectParent.transform.GetChild(0).GetComponentInChildren<Image>().sprite = _slot.ItemObject.Sprite;
+            _slot.GameObjectParent.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1);
+            _slot.GameObjectParent.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = _slot.Amount == 1 ? "" : _slot.Amount.ToString("n0");
         }
         else
         {
-            _slot.gameObjectParent.transform.GetChild(0).GetComponentInChildren<Image>().sprite = null;
-            _slot.gameObjectParent.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0);
-            _slot.gameObjectParent.GetComponentInChildren<TextMeshProUGUI>().text = "";
+            _slot.GameObjectParent.transform.GetChild(0).GetComponentInChildren<Image>().sprite = null;
+            _slot.GameObjectParent.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0);
+            _slot.GameObjectParent.GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
         onUpdate?.Invoke();
     }
 
+    //adds event triggers to inventory slots
     protected void AddEvent(GameObject obj, EventTriggerType type, UnityAction<BaseEventData> action)
     {
         EventTrigger trigger = obj.GetComponent<EventTrigger>();
@@ -88,6 +115,7 @@ public abstract class UserInterfaceBase : MonoBehaviour
         trigger.triggers.Add(eventTrigger);
     }
 
+    #region event functions
     protected void OnEnter(GameObject obj)
     {
         MouseData.slotHoveredOver = obj;
@@ -96,12 +124,11 @@ public abstract class UserInterfaceBase : MonoBehaviour
             StartCoroutine(ShowTooltip(obj));
         }
         _isHovering = true;
-        _hoveredSlot = obj;
+        
     }
     protected void OnExit(GameObject obj)
     {
-        _mouseItem.HoverObj = null;
-        _mouseItem.HoverItem = null;
+
         StopCoroutine(ShowTooltip(obj));
         _tooltip.SetActive(false);
         _isHovering = false;
@@ -109,9 +136,9 @@ public abstract class UserInterfaceBase : MonoBehaviour
 
     protected void OnSelect(GameObject obj)
     {
-     
+
     }
- 
+
     public void OnDragStart(GameObject obj)
     {
         MouseData.tempItemBeingDragged = CreateTempItem(obj);
@@ -120,12 +147,9 @@ public abstract class UserInterfaceBase : MonoBehaviour
 
     protected void OnDragEnd(GameObject obj)
     {
-      
+
         Destroy(MouseData.tempItemBeingDragged);
-        if (_mouseItem.HoverObj)
-        {
-            _inventory.MoveItem(_inventoryUI[obj], _inventoryUI[_mouseItem.HoverObj]);
-        }
+
 
 
         if (MouseData.interfaceMouseIsOver == null)
@@ -144,21 +168,25 @@ public abstract class UserInterfaceBase : MonoBehaviour
     protected void OnDrag(GameObject obj)
     {
         if (MouseData.tempItemBeingDragged != null)
+        {
             MouseData.tempItemBeingDragged.GetComponent<RectTransform>().position = Input.mousePosition;
+        }
     }
 
     protected void OnEnterInterface(GameObject obj)
     {
         MouseData.interfaceMouseIsOver = obj.GetComponent<UserInterfaceBase>();
-        
+
     }
     protected void OnExitInterface(GameObject obj)
     {
         MouseData.interfaceMouseIsOver = null;
-        
-    }
-      
 
+    }
+    #endregion
+
+
+    #region event support functions
     protected void SpawnDroppedItem(GameObject obj)
     {
         Vector3 mousePos = Mouse.current.position.ReadValue();
@@ -196,63 +224,97 @@ public abstract class UserInterfaceBase : MonoBehaviour
         }
         return tempItem;
     }
+    private void DropItemAtPlayer(InputAction.CallbackContext context)
+    {
+        if (_isHovering && _inventoryUI[MouseData.slotHoveredOver].Item.Id != -1 && this.Type == InterfaceType.Inventory)
+        {
 
-    IEnumerator ShowTooltip(GameObject obj)
+            Vector3 Worldpos = _playerObject.transform.position + new Vector3(2, 2, 0);
+            _itemPrefab.Item = _inventoryUI[MouseData.slotHoveredOver].Item.Reference;
+            GameObject temp = Instantiate(_itemPrefab.gameObject, Worldpos, Quaternion.identity, null);
+            _inventoryUI[MouseData.slotHoveredOver].RemoveItem();
+        }
+    }
+    private IEnumerator ShowTooltip(GameObject obj)
     {
         _tooltip.SetActive(true);
         _tooltip.GetComponentInChildren<TextMeshProUGUI>().text = _inventoryUI[obj].Item.Reference.Description;
         yield return null;
     }
 
-    private void DropItemAtPlayer(InputAction.CallbackContext context)
+    private void EquipHoverItem(InputAction.CallbackContext context)
     {
-        if (_isHovering && _inventoryUI[_hoveredSlot].Item.Id != -1 && this.Type == InterfaceType.Inventory)
+        if (_isHovering && _inventoryUI[MouseData.slotHoveredOver].Item.Id != -1 && this.Type == InterfaceType.Inventory && _inventoryUI[MouseData.slotHoveredOver].Item.Reference.Type != ItemType.Consumable)
+        {
+            if (!_referenceEquip.gameObject.activeSelf)
+            {
+                _mainParent.EquipmentScreenActivate(true);
+                _mainParent.AttributeScreenActivate(true);
+            }
+            if (_inventoryUI[MouseData.slotHoveredOver].Item.Reference.Type != ItemType.Consumable && _inventoryUI[MouseData.slotHoveredOver].Item.Id != -1)
+            {
+                for (int i = 0; i < _referenceEquip.Inventory.Inventory.InventoryObject.Length; i++)
+                {
+                    var obj = _referenceEquip.EquipSlots[i];
+
+                    for (int j = 0; j < _referenceEquip.InventoryUI[obj].AllowedItems.Length; j++)
+                    {
+                        if (_inventoryUI[MouseData.slotHoveredOver].Item.Id != -1)
+                        {
+                            if (_referenceEquip.InventoryUI[obj].AllowedItems[j] == _inventoryUI[MouseData.slotHoveredOver].Item.Reference.Type)
+                            {
+                                _inventory.MoveItem(_inventoryUI[MouseData.slotHoveredOver], _referenceEquip.InventoryUI[obj]);
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
+            
+        }
+        else if (_isHovering && _referenceEquip.InventoryUI[MouseData.slotHoveredOver].Item.Id != -1 && this.Type == InterfaceType.Equipment )
         {
 
-            Vector3 Worldpos = _playerObject.transform.position + new Vector3(2, 2, 0);
-            _itemPrefab.Item = _inventoryUI[_hoveredSlot].Item.Reference;
-            GameObject temp = Instantiate(_itemPrefab.gameObject, Worldpos, Quaternion.identity, null);
-            _inventoryUI[_hoveredSlot].RemoveItem();
-        }    
-    }
+            
+            {
 
-    private void UpdateInventoryUI()
+                for (int i = 0; i < _inventory.Inventory.InventoryObject.Length; i++)
+                {
+
+                    var obj = _referenceInventory.InventorySlots[i];
+
+                    if (_referenceInventory.InventoryUI[obj].Item.Id == -1)
+                    {
+                       
+                        _referenceInventory.Inventory.MoveItem(_referenceInventory.InventoryUI[obj], _referenceEquip.InventoryUI[MouseData.slotHoveredOver]);
+                        break;
+                    }
+
+
+                }
+            }
+        }
+    }
+    #endregion
+
+
+    //updates inventoryUI on enable.
+    protected void UpdateInventoryUI()
     {
         for (int i = 0; i < _inventory.Inventory.InventoryObject.Length; i++)
         {
             if (this._type == InterfaceType.Inventory)
             {
                 OnSlotUpdate(_inventory.Inventory.InventoryObject[i]);
-            }    
+            }
         }
     }
 
-    private void OnEnable()
-    {
-        _playerInput.UserInterface.Enable();
-        Debug.Log("hello");
-       UpdateInventoryUI(); 
-    }
-    private void OnDisable()
-    {
-        _playerInput.UserInterface.Disable();
-        Destroy(MouseData.tempItemBeingDragged);
-    }
+   
 }
 
-public class MouseItem
-{
-    private GameObject _obj;
-    private InventorySlot _item;
-    private InventorySlot _hoverItem;
-    private GameObject _hoverObj;
-
-    public GameObject Obj { get { return _obj; } set { _obj = value; } }
-    public InventorySlot Item { get { return _item; } set { _item = value; } }
-    public InventorySlot HoverItem { get { return _hoverItem; } set { _hoverItem = value; } }
-    public GameObject HoverObj { get { return _hoverObj; } set { _hoverObj = value; } }
-}
-
+//support class for events, used to assist with dragging and item interactions
 public static class MouseData
 {
     public static UserInterfaceBase interfaceMouseIsOver;

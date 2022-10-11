@@ -1,8 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+/// <summary>
+/// main player controller, controls movement state machine and item pickups
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
     //serialized fields
@@ -11,12 +13,12 @@ public class PlayerController : MonoBehaviour
     //state machine references
     private BaseState _currentState;
     private StateFactory _factory;
-    
+
     //character reference
     private Rigidbody2D _character;
     private PlayerControls _playerInput;
     private Animator _animator;
-    
+
 
     //variables to store animator bool hashes
     private int _isWalkingHash;
@@ -37,6 +39,7 @@ public class PlayerController : MonoBehaviour
     private bool _isMovementPressed;
     private bool _isRunPressed;
 
+    //getters and setters
     public BaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
     public Animator Animator { get { return _animator; } }
     public bool IsMovementPressed { get { return _isMovementPressed; } }
@@ -60,15 +63,15 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponentInChildren<Animator>();
         _character.constraints = RigidbodyConstraints2D.FreezeRotation;
 
-        //set factory and state
-        _factory = new StateFactory(this);
-        _currentState = _factory.Idle();
-        _currentState.EnterState();
-
         //set the parameter hash references
         _isWalkingHash = Animator.StringToHash("isWalking");
         _isRunningHash = Animator.StringToHash("isRunning");
         _directionHash = Animator.StringToHash("direction");
+
+        //set factory and state
+        _factory = new StateFactory(this);
+        _currentState = _factory.Idle();
+        _currentState.EnterState();
 
         //set player input callbacks
         _playerInput.CharacterControls.Move.started += OnMovementInput;
@@ -77,13 +80,12 @@ public class PlayerController : MonoBehaviour
         _playerInput.CharacterControls.Run.started += OnRun;
         _playerInput.CharacterControls.Run.canceled += OnRun;
     }
- 
 
-
-    void Update()
+    private void Update()
     {
+        CheckDirection();
         _currentState.UpdateState();
-        CheckDirection(); 
+
     }
 
     private void FixedUpdate()
@@ -97,42 +99,6 @@ public class PlayerController : MonoBehaviour
             _character.velocity = Vector2.zero;
         }
     }
-
-    private void OnMovementInput(InputAction.CallbackContext context)
-    {
-        
-        _currentMovementInput = context.ReadValue<Vector2>();
-        
-        _isMovementPressed = _currentMovementInput.x != CONSTANT_ZERO || _currentMovementInput.y != CONSTANT_ZERO;
-    }
-
-    private void OnRun(InputAction.CallbackContext context)
-    {
-        
-        _isRunPressed = context.ReadValueAsButton();
-    }
-
-    private void CheckDirection()
-    {
-        if (_appliedMovement.x == 1 && _appliedMovement.y == 0)
-        {
-            _directionValue = 2;
-        }
-        else if (_appliedMovement.x == -1 && _appliedMovement.y == 0)
-        {
-            _directionValue = 4;
-        }
-        else if(_appliedMovement.x == 0 && _appliedMovement.y == 1)
-        {
-            _directionValue = 1;
-        }
-        else if (_appliedMovement.x == 0 && _appliedMovement.y == -1)
-        {
-            _directionValue = 3;
-        }
-    }
-
-
     private void OnEnable()
     {
         _playerInput.CharacterControls.Enable();
@@ -142,19 +108,60 @@ public class PlayerController : MonoBehaviour
         _playerInput.CharacterControls.Disable();
     }
 
+    #region movement input 
+    private void OnMovementInput(InputAction.CallbackContext context)
+    {
+
+        _currentMovementInput = context.ReadValue<Vector2>();
+
+        _isMovementPressed = _currentMovementInput.x != CONSTANT_ZERO || _currentMovementInput.y != CONSTANT_ZERO;
+    }
+
+    private void OnRun(InputAction.CallbackContext context)
+    {
+
+        _isRunPressed = context.ReadValueAsButton();
+    }
+
+    private void CheckDirection()
+    {
+        if (_appliedMovement.x >= 1 && _appliedMovement.y == 0)
+        {
+            _directionValue = 2;
+        }
+        else if (_appliedMovement.x <= -1 && _appliedMovement.y == 0)
+        {
+            _directionValue = 4;
+        }
+        else if (_appliedMovement.x == 0 && _appliedMovement.y >= 1)
+        {
+            _directionValue = 1;
+        }
+        else if (_appliedMovement.x == 0 && _appliedMovement.y <= -1)
+        {
+            _directionValue = 3;
+        }
+    }
+    #endregion
+
+
+    //if player colliders with an item that is a trigger, it either picks it up or consumes it depending on type.
     private void OnTriggerEnter2D(Collider2D collision)
     {
         var itemObject = collision.GetComponent<ItemObject>();
         if (itemObject != null && itemObject.Item.Type == ItemType.Upgrade)
         {
             for (int i = 0; i < itemObject.Item.ItemReference.Buffs.Length; i++)
-                if(itemObject.Item.ItemReference.Buffs[i] != null)
+            {
+                if (itemObject.Item.ItemReference.Buffs[i] != null)
                 {
                     _player.IncreaseAttribute(itemObject.Item.ItemReference.Buffs[i].Attribute, itemObject.Item.ItemReference.Buffs[i].Value);
                 }
+            }
+
             itemObject.DestroySelf();
         }
-        else if(itemObject != null)
+        else if (itemObject != null)
         {
             Item item = new Item(itemObject.Item);
             _inventory.AddItem(item, 1);

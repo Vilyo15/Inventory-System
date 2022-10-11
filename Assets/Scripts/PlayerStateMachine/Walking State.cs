@@ -1,16 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/// <summary>
+/// walking state of the movement state machine
+/// </summary>
 public class WalkingState : BaseState
 {
     public WalkingState(PlayerController context, StateFactory factory) : base(context, factory) { }
     public override void CheckSwitchState()
     {
+        //if not walking, idle
         if (!Context.IsMovementPressed)
         {
             SwitchState(Factory.Idle());
         }
+        // if running, run
         else if (Context.IsMovementPressed && Context.IsRunPressed)
         {
             SwitchState(Factory.Run());
@@ -19,7 +20,6 @@ public class WalkingState : BaseState
 
     public override void EnterState()
     {
-        Debug.Log("walking");
         Context.Animator.SetBool(Context.IsWalkingHash, true);
         Context.Animator.SetBool(Context.IsRunningHash, false);
     }
@@ -37,5 +37,5 @@ public class WalkingState : BaseState
         Context.Animator.SetInteger(Context.DirectionHash, Context.DirectionValue);
     }
 
-    
+
 }

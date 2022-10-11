@@ -295,3 +295,12 @@ MonoBehaviour:
       Parent: {fileID: 0}
       gameObjectParent: {fileID: 0}
   UpdateInventory: 0
+  tempItem:
+    Name: Pants
+    Id: 5
+    Buffs:
+    - Attribute: 1
+      Value: 2
+    Reference: {fileID: 11400000, guid: 8727f99db53db7447b2b7b1477316022, type: 2}
+    MaxStack: 0
+  tempAmount: 1

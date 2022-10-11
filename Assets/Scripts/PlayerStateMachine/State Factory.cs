@@ -1,4 +1,6 @@
-
+/// <summary>
+/// factory for creating states of the state machine
+/// </summary>
 public class StateFactory
 {
     private PlayerController _context;
