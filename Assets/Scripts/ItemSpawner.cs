@@ -1,16 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// simple component that handles item spawning when pressing the O button. 
+/// </summary>
 public class ItemSpawner : MonoBehaviour
 {
     [SerializeField] private ExistingItemsScriptableObject _itemList;
     [SerializeField] private ItemObject _itemPrefab;
     [SerializeField] private Transform _spawnLocation;
+
     private PlayerControls _playerInput;
-    // Start is called before the first frame update
-    void Awake()
+
+
+    private void Awake()
     {
         _playerInput = new PlayerControls();
 

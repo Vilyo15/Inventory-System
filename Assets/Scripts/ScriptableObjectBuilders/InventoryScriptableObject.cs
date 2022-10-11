@@ -1,7 +1,9 @@
-    using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// scriptable object that holds all data associated with an inventory object,
+/// a unique one must be created for each use (inventory, equip, storage..)
+/// </summary>
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
 public class InventoryScriptableObject : ScriptableObject
 {
@@ -9,9 +11,11 @@ public class InventoryScriptableObject : ScriptableObject
     public bool UpdateInventory = false;
     public Item tempItem;
     public int tempAmount;
+
+    //adds an item to the inventory (on pickup), if item ID already pressent adds to the stack
     public void AddItem(Item item, int amount)
     {
-        
+
         if (item.Reference.Type == ItemType.Material || item.Reference.Type == ItemType.Consumable)
         {
             for (int i = 0; i < Inventory.InventoryObject.Length; i++)
@@ -21,7 +25,7 @@ public class InventoryScriptableObject : ScriptableObject
                     Inventory.InventoryObject[i].AddAmount(amount);
                     return;
                 }
-                else if(Inventory.InventoryObject[i].Item.Id == item.Id)
+                else if (Inventory.InventoryObject[i].Item.Id == item.Id)
                 {
                     if (Inventory.InventoryObject[i].Amount == Inventory.InventoryObject[i].Item.MaxStack)
                     {
@@ -32,10 +36,10 @@ public class InventoryScriptableObject : ScriptableObject
                         Inventory.InventoryObject[i].AddAmount(amount);
                         return;
                     }
-                    
+
                 }
-                
-                
+
+
             }
         }
         else
@@ -48,9 +52,11 @@ public class InventoryScriptableObject : ScriptableObject
         SetEmptySlot(item, amount);
 
     }
+
+    //if no item present or stack is ful, it adds the item to the next empty slot, if no empty slot
+    //triggers expand inventory.
     public InventorySlot SetEmptySlot(Item item, int amount)
     {
-        Debug.Log("emptyslot start");
 
         for (int i = 0; i < Inventory.InventoryObject.Length; i++)
         {
@@ -58,26 +64,25 @@ public class InventoryScriptableObject : ScriptableObject
             {
                 Inventory.InventoryObject[i].UpdateSlot(item, amount);
                 return Inventory.InventoryObject[i];
-                
-                
+
+
             }
-            
-            
+
+
         }
 
-        Debug.Log("emptyslot end");
-        
-        
         UpdateInventory = true;
         tempAmount = amount;
         tempItem = item;
-        
+
 
         return null;
     }
 
+    //moves item from one slot to a different one
     public void MoveItem(InventorySlot item1, InventorySlot item2)
     {
+        Debug.Log((item2.CanPlaceInSlot(item1.ItemObject) + " " + item1.CanPlaceInSlot(item2.ItemObject)));
         if (item2.CanPlaceInSlot(item1.ItemObject) && item1.CanPlaceInSlot(item2.ItemObject))
         {
             InventorySlot temp = new InventorySlot(item2.Item, item2.Amount);
@@ -86,7 +91,7 @@ public class InventoryScriptableObject : ScriptableObject
         }
     }
 
-
+    //generates a new empty inventory
     public void Clear()
     {
         Inventory = new Inventory();

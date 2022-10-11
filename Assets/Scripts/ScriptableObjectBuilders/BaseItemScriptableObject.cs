@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum ItemType
@@ -23,7 +21,9 @@ public enum Attributes
     Dodge
 }
 
-
+/// <summary>
+/// scriptable item for item bases, accepts item objects and data associated with displaying the item objects
+/// </summary>
 public class BaseItemScriptableObject : ScriptableObject
 {
     public Sprite Sprite;
@@ -32,14 +32,12 @@ public class BaseItemScriptableObject : ScriptableObject
     public string Description;
     public Item ItemReference = new Item();
     public int MaxStack;
-    public Item CreateItem()
-    {
-        Item newItem = new Item(this);
-        return newItem;
-    }
 
-   
 }
+
+/// <summary>
+/// item class, contaits data about items themselves and builders for creating them.
+/// </summary>
 [System.Serializable]
 public class Item
 {
@@ -70,19 +68,21 @@ public class Item
         }
     }
 }
-
+/// <summary>
+/// item buff class, attribute and value, simple
+/// </summary>
 [System.Serializable]
 public class ItemBuff
 {
     public Attributes Attribute;
     public int Value;
-    
 
-   
+
+
     public ItemBuff(int value)
     {
         Attribute = Attributes.Attack;
         Value = value;
     }
-  
+
 }

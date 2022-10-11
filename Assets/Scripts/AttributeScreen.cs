@@ -1,8 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
+
+/// <summary>
+/// atribute screen, hosts attributes values.
+/// </summary>
 public class AttributeScreen : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _attack;
@@ -10,14 +12,8 @@ public class AttributeScreen : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _speed;
     [SerializeField] private TextMeshProUGUI _dodge;
     [SerializeField] private PlayerBaseScriptableObject _player;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         _attack.text = "ATK:\n" + _player.Player.ActiveAttributes[Attributes.Attack].Value.ToString();
         _defence.text = "DEF:\n" + _player.Player.ActiveAttributes[Attributes.Defence].Value.ToString();
